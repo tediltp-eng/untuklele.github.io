@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Untuk Kamu</title>
+
+<style>
+
+body{
+margin:0;
+height:100vh;
+background:linear-gradient(135deg,#ffb6c1,#ffc0cb);
+font-family:Arial;
+text-align:center;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+overflow:hidden;
+}
+
+h1{
+font-size:60px;
+color:#d63384;
+}
+
+h2{
+font-size:40px;
+color:#c2185b;
+}
+
+img{
+width:250px;
+margin:20px;
+}
+
+.button-box{
+position:relative;
+width:420px;
+height:80px;
+}
+
+button{
+padding:15px 35px;
+font-size:22px;
+border:none;
+border-radius:12px;
+cursor:pointer;
+}
+
+#btn_mau{
+background:#ff4d88;
+color:white;
+position:absolute;
+left:60px;
+top:0;
+}
+
+#btn_gamau{
+background:#eeeeee;
+position:absolute;
+left:230px;
+top:0;
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+pointer-events:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Hai Cantik!</h1>
+
+<img src="https://media.tenor.com/Z8ezUHZzcLoAAAAC/love.gif">
+
+<h2>Maukah kamu menjadi kesayangan aku?</h2>
+
+<div class="button-box">
+<button id="btn_mau">Mau</button>
+<button id="btn_gamau" onclick="gamau()">Gamau</button>
+</div>
+
+<canvas id="confetti"></canvas>
+
+<script>
+
+function gamau(){
+
+let btn=document.getElementById("btn_gamau");
+
+let moveX=(Math.random()*120)-60;
+let moveY=(Math.random()*80)-40;
+
+let currentLeft=btn.offsetLeft;
+let currentTop=btn.offsetTop;
+
+btn.style.left=(currentLeft+moveX)+"px";
+btn.style.top=(currentTop+moveY)+"px";
+
+}
+
+const canvas=document.getElementById("confetti");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let confetti=[];
+
+function random(min,max){
+return Math.random()*(max-min)+min;
+}
+
+function color(){
+const colors=["#ff4d88","#ff99cc","#ffd1dc","#ffffff"];
+return colors[Math.floor(Math.random()*colors.length)];
+}
+
+function createConfetti(){
+
+confetti=[];
+
+for(let i=0;i<150;i++){
+confetti.push({
+x:random(0,canvas.width),
+y:random(-canvas.height,0),
+r:random(4,8),
+speed:random(2,5),
+color:color(),
+tilt:random(-10,10),
+angle:0
+});
+}
+
+}
+
+function draw(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+confetti.forEach(c=>{
+ctx.beginPath();
+ctx.lineWidth=c.r;
+ctx.strokeStyle=c.color;
+ctx.moveTo(c.x+c.tilt,c.y);
+ctx.lineTo(c.x,c.y+c.tilt);
+ctx.stroke();
+});
+
+update();
+
+}
+
+function update(){
+
+confetti.forEach(c=>{
+c.y+=c.speed;
+c.angle+=0.1;
+c.tilt=Math.sin(c.angle)*10;
+
+if(c.y>canvas.height){
+c.y=-10;
+c.x=Math.random()*canvas.width;
+}
+
+});
+
+}
+
+function animate(){
+draw();
+requestAnimationFrame(animate);
+}
+
+document.getElementById("btn_mau").onclick=function(){
+
+createConfetti();
+animate();
+
+alert("Yay! Aku senang banget ❤️");
+
+}
+
+</script>
+
+</body>
+</html>
